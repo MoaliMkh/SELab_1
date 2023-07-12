@@ -9,15 +9,21 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(server_address)
 
 while True:
-    command = input('Enter your Message:\n').lower()
-    command_parts = command.split(' ')
-    if command_parts[0] == 'login' and len(command_parts) == 3:
-        message_to_send = {'type': 'login', 'username': command_parts[1], 'password': command_parts[2], }
-        print(f'Sending:\n{json.dumps(message_to_send)}')
-        client_socket.send(json.dumps(message_to_send).encode())
-        response, _ = client_socket.recvfrom(1024)
-        print(response.decode())
+
+    command = input('Enter your Message:\n')
+    print(f'Sending:\n{command}').lower
+    
+    command = command.split(' ')
+    if command[0] == 'signup' and len(command) == 3:
+        message_to_send = json.dumps({'type': 'signup', 'username': command[1], 'password': command[2]})
+    elif command[0] == 'login' and len(command) == 3:
+        message_to_send = {'type': 'login', 'username': command[1], 'password': command[2], }
 
     else:
         print('Invalid Command')
         continue
+
+    client_socket.send(message_to_send.encode())
+    response, _ = client_socket.recvfrom(1024)
+    print(f'Receiving:\n{response.decode()}')
+
