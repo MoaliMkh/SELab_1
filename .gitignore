@@ -309,3 +309,4 @@ pyrightconfig.json
 
 *.DS_Store
 .idea
+Server/Users.txt
