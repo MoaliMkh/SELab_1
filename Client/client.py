@@ -26,4 +26,3 @@ while True:
     client_socket.send(message_to_send.encode())
     response, _ = client_socket.recvfrom(1024)
     print(f'Receiving:\n{response.decode()}')
-
