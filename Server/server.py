@@ -14,6 +14,8 @@ def handle_client(connection_sock):
             response, current_user = answer_login(command['username'], command['password'], current_user)
         elif command['type'] == 'direct':
             response = answer_direct(command['contact'], command['message'], current_user)
+        elif command['type'] == 'inbox':
+            response = answer_inbox(current_user)
         connection_sock.send(response.encode())
 
 
@@ -56,6 +58,16 @@ def answer_direct(contact, direct, current_user):
             break
     else:
         message = {'type': 'ERROR', 'message': 'Contact not found'}
+    return json.dumps(message)
+
+
+def answer_inbox(current_user):
+    message = {'type': 'OK'}
+    directs = []
+    for direct in all_directs:
+        if direct[1] == current_user:
+            directs.append({'sender': direct[0], 'direct': direct[2]})
+    message['directs'] = directs
     return json.dumps(message)
 
 
