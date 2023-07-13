@@ -12,6 +12,10 @@ def handle_client(connection_sock):
             response = answer_signup(command['username'], command['password'])
         elif command['type'] == 'login':
             response, current_user = answer_login(command['username'], command['password'], current_user)
+        elif command['type'] == 'direct':
+            response = answer_direct(command['contact'], command['message'], current_user)
+        elif command['type'] == 'inbox':
+            response = answer_inbox(current_user)
         connection_sock.send(response.encode())
 
 
@@ -46,8 +50,32 @@ def answer_signup(username, password):
     return json.dumps(message)
 
 
+def answer_direct(contact, direct, current_user):
+    for user in all_users['Users']:
+        if user['username'] == contact:
+            message = {'type': 'OK', 'message': 'Direct Message Delivered'}
+            all_directs.append([current_user, contact, direct])
+            break
+    else:
+        message = {'type': 'ERROR', 'message': 'Contact not found'}
+    return json.dumps(message)
+
+
+def answer_inbox(current_user):
+    message = {'type': 'OK'}
+    directs = []
+    for direct in all_directs:
+        if direct[1] == current_user:
+            directs.append({'sender': direct[0], 'direct': direct[2]})
+    message['directs'] = directs
+    return json.dumps(message)
+
+
 with open('Users.txt', 'r') as file:
     all_users = json.loads(file.read())
+
+# each tuple: (sender, receiver, direct message)
+all_directs = []
 
 HOST, PORT = 'localhost', 8080
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
