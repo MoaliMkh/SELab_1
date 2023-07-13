@@ -44,6 +44,7 @@ def answer_login(username, password, current_user):
             message = {'type': 'ERROR', 'message': 'Username not Found'}
     return json.dumps(message), current_user
 
+  
 def answer_new_group(name, current_user):
     groups_name = list(groups.keys())
     for group in groups_name:
@@ -57,7 +58,8 @@ def answer_new_group(name, current_user):
         message = {'type': 'OK', 'message': 'Group Created'}
     return json.dumps(message)
 
-def answer_signup(username, password, all_users, current_user):
+  
+def answer_signup(username, password, current_user):
     if current_user is not None:
         message = {'type': 'ERROR', 'message': 'Exit required'}
     else:
