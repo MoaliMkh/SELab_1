@@ -1,6 +1,8 @@
 {
-	"Group1": {
-		"admin": "aaa",
-		"members": ["aaa", "bbb"]
-	}
+    "g1": {
+        "admin": "user1",
+        "members": [
+            "user1"
+        ]
+    }
 }
