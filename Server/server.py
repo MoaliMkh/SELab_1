@@ -12,10 +12,6 @@ def handle_client(connection_sock):
             response = answer_signup(command['username'], command['password'])
         elif command['type'] == 'login':
             response, current_user = answer_login(command['username'], command['password'], current_user)
-        
-        print(f'Receiving: {connection_sock.recv(1024).decode()}')
-
-        print(f'Sending:\n{response}')
         connection_sock.send(response.encode())
 
 
@@ -44,13 +40,13 @@ def answer_signup(username, password):
             break
     else:
         all_users['Users'].append({'username': username, 'password': password})
-        with open('Server/Users.txt', 'w') as file:
+        with open('Users.txt', 'w') as file:
             file.write(json.dumps(all_users, indent=4))
         message = {'type': 'OK', 'message': 'Signup Successful'}
     return json.dumps(message)
 
 
-with open('Server/Users.txt', 'r') as file:
+with open('Users.txt', 'r') as file:
     all_users = json.loads(file.read())
 
 HOST, PORT = 'localhost', 8080
@@ -59,7 +55,7 @@ server_address = (HOST, PORT)
 server_socket.bind(server_address)
 server_socket.listen(1)
 
-with open('Server/Users.txt', 'r') as file:
+with open('Users.txt', 'r') as file:
     all_users = json.loads(file.read())
 online_users = []
 
