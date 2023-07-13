@@ -18,6 +18,8 @@ def handle_client(connection_sock):
             response = answer_inbox(current_user)
         elif command['type'] == 'online':
             response = json.dumps({'type': 'OK', 'online users': list(set(online_users))})
+        elif command['type'] == 'new group':
+            response = answer_new_group(command['name'], current_user)
         elif command['type'] == 'exit':
             online_users.remove(current_user)
             connection_sock.close()
@@ -41,6 +43,19 @@ def answer_login(username, password, current_user):
         else:
             message = {'type': 'ERROR', 'message': 'Username not Found'}
     return json.dumps(message), current_user
+
+def answer_new_group(name, current_user):
+    groups_name = list(groups.keys())
+    for group in groups_name:
+        if group == name:
+            message = {'type': 'ERROR', 'message': 'Name is already Used'}
+            break
+    else:
+        groups[name] = {'admin': current_user, 'members': [current_user]}
+        with open('Groups.txt', 'w') as file:
+            file.write(json.dumps(groups, indent=4))
+        message = {'type': 'OK', 'message': 'Group Created'}
+    return json.dumps(message)
 
 def answer_signup(username, password, all_users, current_user):
     if current_user is not None:
@@ -94,6 +109,9 @@ server_socket.listen(1)
 with open('Users.txt', 'r') as file:
     all_users = json.loads(file.read())
 online_users = []
+
+with open('Groups.txt', 'r') as file:
+    groups = json.loads(file.read())
 
 print('Server Listening...')
 while True:
