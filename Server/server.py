@@ -16,6 +16,8 @@ def handle_client(connection_sock):
             response = answer_direct(command['contact'], command['message'], current_user)
         elif command['type'] == 'inbox':
             response = answer_inbox(current_user)
+        elif command['type'] == 'online':
+            response = json.dumps({'type': 'OK', 'online users': list(set(online_users))})
         connection_sock.send(response.encode())
 
 

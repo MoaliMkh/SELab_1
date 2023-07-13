@@ -20,6 +20,8 @@ while True:
         message_to_send = json.dumps({'type': 'direct', 'contact': command[1], 'message': ' '.join(command[2:])})
     elif command[0] == 'inbox' and len(command) == 1:
         message_to_send = json.dumps({'type': 'inbox'})
+    elif command[0] == 'online' and len(command) == 1:
+        message_to_send = {'type': 'online', }
     else:
         print('Invalid Command')
         continue
