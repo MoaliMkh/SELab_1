@@ -18,6 +18,10 @@ def handle_client(connection_sock):
             response = answer_inbox(current_user)
         elif command['type'] == 'online':
             response = json.dumps({'type': 'OK', 'online users': list(set(online_users))})
+        elif command['type'] == 'exit':
+            online_users.remove(current_user)
+            connection_sock.close()
+            break
         connection_sock.send(response.encode())
 
 
