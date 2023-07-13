@@ -310,3 +310,4 @@ pyrightconfig.json
 *.DS_Store
 .idea
 Server/Users.txt
+Server/Groups.txt
