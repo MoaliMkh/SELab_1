@@ -22,7 +22,7 @@ while True:
     elif command[0] == 'online' and len(command) == 1:
         message_to_send = json.dumps({'type': 'online'})
     elif command[0] == 'new_group' and len(command) == 2:
-        message_to_send = {'type': 'new group', 'name': command[1], }
+        message_to_send = json.dumps({'type': 'new group', 'name': command[1]})
     elif command[0] == 'exit' and len(command) == 1:
         message_to_send = json.dumps({'type': 'exit'})
     else:
