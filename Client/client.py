@@ -16,6 +16,8 @@ while True:
         message_to_send = json.dumps({'type': 'signup', 'username': command[1], 'password': command[2]})
     elif command[0] == 'login' and len(command) == 3:
         message_to_send = json.dumps({'type': 'login', 'username': command[1], 'password': command[2]})
+    elif command[0] == 'direct' and len(command) >= 3:
+        message_to_send = json.dumps({'type': 'direct', 'contact': command[1], 'message': ' '.join(command[2:])})
     else:
         print('Invalid Command')
         continue
