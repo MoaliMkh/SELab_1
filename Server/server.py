@@ -9,13 +9,19 @@ def handle_client(connection_sock):
         command = json.loads(connection_sock.recv(1024).decode())
         print(f'Receiving: {command}')
         if command['type'] == 'signup':
-            response = answer_signup(command['username'], command['password'])
+            response = answer_signup(command['username'], command['password'], current_user)
         elif command['type'] == 'login':
             response, current_user = answer_login(command['username'], command['password'], current_user)
         elif command['type'] == 'direct':
             response = answer_direct(command['contact'], command['message'], current_user)
         elif command['type'] == 'inbox':
             response = answer_inbox(current_user)
+        elif command['type'] == 'online':
+            response = json.dumps({'type': 'OK', 'online users': list(set(online_users))})
+        elif command['type'] == 'exit':
+            online_users.remove(current_user)
+            connection_sock.close()
+            break
         connection_sock.send(response.encode())
 
 
@@ -36,17 +42,19 @@ def answer_login(username, password, current_user):
             message = {'type': 'ERROR', 'message': 'Username not Found'}
     return json.dumps(message), current_user
 
-
-def answer_signup(username, password):
-    for user in all_users['Users']:
-        if user['username'] == username:
-            message = {'type': 'ERROR', 'message': 'Username is used'}
-            break
+def answer_signup(username, password, all_users, current_user):
+    if current_user is not None:
+        message = {'type': 'ERROR', 'message': 'Exit required'}
     else:
-        all_users['Users'].append({'username': username, 'password': password})
-        with open('Users.txt', 'w') as file:
-            file.write(json.dumps(all_users, indent=4))
-        message = {'type': 'OK', 'message': 'Signup Successful'}
+        for user in all_users['Users']:
+            if user['username'] == username:
+                message = {'type': 'ERROR', 'message': 'Username is used'}
+                break
+            else:
+                all_users['Users'].append({'username': username, 'password': password})
+                with open('Users.txt', 'w') as file:
+                    file.write(json.dumps(all_users, indent=4))
+                message = {'type': 'OK', 'message': 'Signup Successful'}
     return json.dumps(message)
 
 
