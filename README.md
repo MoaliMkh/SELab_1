@@ -38,7 +38,7 @@
 
 ([git-scm](https://git-scm.com/book/en/v2/Git-Branching-Rebasing))
 
-+ تفاوت چهار دستور **reset** و **revert** و **restore** را بیان کنید.
++ تفاوت سه دستور **reset** و **revert** و **restore** را بیان کنید.
   + دستور `reset` برای برگرداندن تغییرات یک commited file است. پس از استفاده از این دستور وضعیت فایل به حالت پیش از تغییرات بازخواهد گشت.
   ([w3schools](https://www.w3schools.com/git/git_reset.asp?remote=github))
   + دستور `revert` یکی از ویژگی‌های اصلی git را نمایش می‌دهد. به کمک این دستور می‌توان بین نسخه‌ها یا همان commit های مختلف جابجا شد و وضعیت پروژه در آن نسخه را مشاهده کرد.
